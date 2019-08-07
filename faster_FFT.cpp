@@ -5,28 +5,21 @@
 
 using namespace std;
 
-const int N = 1000005;
+const int N = 100000;
 
 typedef complex <double> cp;
 
-// void init(){
-//     const double PI = acos(-1);
-//     for(int i = 0; i < n; i++){
-//         omg[i] = cp(cos(2 * PI * i / n), sin(2 * PI * i / n));
-//         inv[i] = conj(omg[i]);
-//     }
-// }
-    cp omg[N], inv[N];
-    cp temp[N];
 
-void fft(cp *data, int size){
+void fft(cp *data, int size,bool type=false){
     const double PI = acos(-1);
     static int old_size=0;
+    static cp omg[N], inv[N];
     if(old_size != size)
         for(int i = 0; i < size; i++){
             omg[i] = cp(cos(2 * PI * i / size), sin(2 * PI * i / size));
-            inv[i] = conj(omg[i]);
+            if(type)omg[i] = conj(omg[i]);
         }
+ 
     old_size = size;
     int lim = 0;
     // lim*2 < n
@@ -50,9 +43,11 @@ void fft(cp *data, int size){
 
 int main(){
     // input_size must = 2^n
-      
+    
     int n = 1;
     int data[8]={1,2,1,2,1,2,0,0};
+    cp temp[N];
+    // 2^n > input_size
     while(n < 8) n *= 2;
 
     for(int i = 0; i < 6; i++)
@@ -62,7 +57,6 @@ int main(){
     fft(temp, n);
     for(int i = 0; i < 8; i++)
         std::cout<<temp[i];
-
 
     return 0;
 }
